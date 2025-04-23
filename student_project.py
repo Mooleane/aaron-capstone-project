@@ -1,0 +1,136 @@
+"""
+Data Structures
+Student Project
+Project Title: Pokédex
+"""
+
+### -- Libraries -- ###
+# Used for requesting information from API's with an API call.
+import requests
+import pp
+
+### -- Variables -- ###
+# The base url for accessing PokéAPI v2.
+URL = "https://pokeapi.co/api/v2/"
+
+# The path for accessing info about a Pokémon's species entries.
+SPECIES_PATH = "pokemon-species/"
+
+# The possible requirements for an evolution, when calling an evolution chain function.
+min_requirements = ("min_level", "min_happiness", "min_beauty", "min_affection")
+
+# Parameters for each request.
+poke_params = {}
+
+### -- Functions -- ###
+# Used for the second stage of a Pokémon in its evolution chain.
+def evolutionRequirements(evolution_information, min_requirement, second_stage):
+    # If the evolution's minimum requirement exists, it will print it as the minimum requirement.
+    if evolution_body["chain"]["evolves_to"][second_stage]["evolution_details"][0][min_requirement] > 0:
+        print("\t\t\t" + min_requirement.replace("min_","").title() + " Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][0][min_requirement])
+        
+# Used for the third stage of a Pokémon in its evolution chain.
+def evolutionRequirements2(evolution_information, min_requirement, second_stage, third_stage):
+    # If the evolution's minimum requirement exists, it will print it as the minimum requirement.
+    if evolution_body["chain"]["evolves_to"][second_stage]["evolves_to"][third_stage]["evolution_details"][0][min_requirement] > 0:
+        print("\t\t\t\t" + min_requirement.replace("min_","").title() + " Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0][min_requirement])
+        
+### -- Introduction -- ###
+# Will only run at the start if the user just started the program.
+# Makes end an empty string to combine itself with the first user input.
+print("Welcome to the Pokédex. Type \"EXIT\" to quit. ", end = "")
+
+### -- Main Loop -- ###
+# Will keep running until the user types "EXIT" to break the loop.
+while True:
+    ## -- User Input -- ##
+    pokemon_name = input("Please enter a Pokémon's Name or Pokédex Number: ")
+    
+    ## -- User Input Verification -- ##
+    # The input loop will stop if the user wants to
+    # quit the program by typing "EXIT".
+    while pokemon_name != "EXIT":
+        # Verifies the user input is either alphabetical for the Pokémon Name
+        # or the user input has a digit for the Pokédex Number.
+        if pokemon_name.isalpha() or pokemon_name.isdigit():
+            # Requests more info about the Pokémon from it's species entries.
+            # The input for 'pokemon_name' is lowered and added to 'URL + species_path'
+            # to get info about that specific Pokémon with url capitalization consistency.
+            request = requests.get(URL + SPECIES_PATH + pokemon_name.lower(), params=poke_params)
+            
+            # Checks if the request was OK (200).
+            if request.status_code == 200:
+                # Continues getting the requested info if the request is OK.
+                body = request.json()
+                # Moves onto displaying the info by breaking out of the while loop.
+                break
+                
+            # Checks if there are too many requests (429).
+            elif request.status_code == 429:
+                pokemon_name = input("PokéAPI v2 is receiving too many requests. Try again later. ")
+                
+            # Assumes the Pokémon was invalid due to the request failing.
+            else:
+                pokemon_name = input("Please enter a valid Pokémon. ")
+                
+        # Assumes the input was invalid due to not being entirely alphabetical or numerical.
+        else:
+            pokemon_name = input("Please enter a valid input (no symbols). ")
+    
+    # Skips displaying info if the user input is "EXIT".
+    if pokemon_name != "EXIT":
+        ## -- Requested Info -- ##
+        # Displays the Pokédex Number, Pokémon Name, Type, Card Entry (flavor text), Pokéball Success Rate, and it's Evolution Chain.
+        print("\nPokédex Number:", body["id"])
+        print("Pokémon Name:", body["name"].title())
+        print("Pokéball Success Rate (Maximum is 255):", body["capture_rate"])
+        
+        print("\nCard Entry:", body["flavor_text_entries"][0]["flavor_text"].replace("\n", " "))
+        
+        # Requests more info about the Pokémon evolution from it's
+        # evolution chain url provided in the species entries.
+        evolution_chain_url = body["evolution_chain"]["url"]
+        evolution_request = requests.get(evolution_chain_url, params=poke_params)
+        evolution_body = evolution_request.json()
+        
+        # Prints out its entire evolution chain.
+        # Interesting results for "Eevee" as the Pokémon.
+        print("\nEvolution Chain")
+        
+        # Prints out the first Pokémon evolutionary stage.
+        print("\tStarts From:", evolution_body["chain"]["species"]["name"].title())
+        
+        # Prints out each path for the Pokémon's second evolutionary stage (i for each evolution path).
+        # Uses len to know how many evolutionary paths there are for that Pokémon in stage two.
+        # Adds the requirement for the Pokémon to evolve into each path such as a level up or an item.
+        for i in range(len(evolution_body["chain"]["evolves_to"])):
+            print("\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][0]["trigger"]["name"].title())
+            
+            # If the evolution requirement uses an item, it will print out the evolution item requirement.
+            if "use-item" in evolution_body["chain"]["evolves_to"][i]["evolution_details"][0]["trigger"]["name"]:
+                # Uses .replace to fill in any hyphens with spaces to improve readability.
+                print("\t\t\tItem Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][0]["item"]["name"].title().replace("-", " "))
+                
+            # Checks all number-based requirements in 'min_requirements' for a Pokémon, then displays each.
+            for min_requirement in min_requirements:
+                evolutionRequirements(evolution_body, min_requirement, i)
+                
+            # Prints out each path for the Pokémon's third evolutionary stage (j for each evolution path).
+            # Uses len to know how many evolutionary paths there are for that Pokémon in stage three.
+            # Adds the requirement for the Pokémon to evolve into each path such as a level up or an item.
+            for j in range(len(evolution_body["chain"]["evolves_to"][i]["evolves_to"])):
+                print("\t\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0]["trigger"]["name"].title())
+                
+                # If the evolution requirement uses an item, it will print out the evolution item requirement.
+                if "use-item" in evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0]["trigger"]["name"]:
+                    # Uses .replace to fill in any hyphens with spaces to improve readability.
+                    print("\t\t\t\tItem Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0]["item"]["name"].title().replace("-", " "))
+                    
+                # Checks all number-based requirements in 'min_requirements' for a Pokémon, then displays each.
+                for min_requirement in min_requirements:
+                    evolutionRequirements2(evolution_body, min_requirement, i, j)
+        print()
+        
+    # Breaks out of the main loop if the user's input is "EXIT".
+    else:
+        break
