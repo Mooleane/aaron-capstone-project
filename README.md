@@ -1,5 +1,5 @@
 # Purpose/Problem Statement
-This program gives the user essential information about a Pokémon as if it were the Pokédex. 
+This [program](student_project.py) gives the user essential information about a Pokémon as if it were the Pokédex. 
 
 Useful for those who are stuck on how to obtain a Pokémon, or don't know what else to do with it.
 # Target Audience
@@ -135,7 +135,7 @@ About 1-2 days were spent in school to implement its main features such as displ
 
 A day was spent at my internship to implement peer suggestions such as displaying the evolution requirements of Pokémon.
 
-Another opportunity arose to recycle this project for our internship's culminating project, where I intend to polish and optimize this program's features.
+Another opportunity arose to recycle this project for our internship's culminating project, where I intend to polish and optimize its features.
 # Tools and Resources Used
 * Python - The programming language used for the project.
 * TechSmart - The primary IDE used when coding this project.
