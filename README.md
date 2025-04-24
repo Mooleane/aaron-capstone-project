@@ -128,7 +128,7 @@ At our internship, we were first introduced to the creation of a project involvi
 
 I chose PokéAPI v2, and skimmed through its documentation for ideas. 
 
-After some brainstorming, I decided to recreate the Pokédex (mainly its evolution functions). 
+After some brainstorming, I decided to recreate the Pokédex (mainly its evolution information). 
 
 About 1-2 days were spent in school to implement its main features such as displaying general insights about a Pokémon and its evolution paths. 
 
@@ -138,4 +138,4 @@ Another opportunity arose to recycle this project for our internship's culminati
 # Tools and Resources Used
 * Python - The programming language used for the project.
 * TechSmart - The primary IDE used when coding this project.
-* PokéAPI v2 - The API this project was based around.
+* PokéAPI v2 - The API this project was based around, including all of its documentation.
