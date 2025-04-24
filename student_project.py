@@ -109,10 +109,15 @@ while True:
         for i in range(len(evolution_body["chain"]["evolves_to"])):
             print("\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][0]["trigger"]["name"].title())
             
-            # If the evolution requirement uses an item, it will print out the evolution item requirement.
-            if "use-item" in evolution_body["chain"]["evolves_to"][i]["evolution_details"][0]["trigger"]["name"]:
-                # Uses .replace to fill in any hyphens with spaces to improve readability.
-                print("\t\t\tItem Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][0]["item"]["name"].title().replace("-", " "))
+            # Loops through each evolution entry for that Pokémon in search of an
+            # "item" key with an existing "name" key and value that contains the item requirement.
+            for z in range(len(evolution_body["chain"]["evolves_to"][i]["evolution_details"])):
+                    # Tries to print to see if it runs into an error or displays the item before skipping to any next iteration.
+                    try:
+                        print("\t\t\tItem Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][z]["item"]["name"].title().replace("-", " "))
+                    except:
+                        # Skips changing or displaying any unnecessary info.
+                        pass
                 
             # Checks all number-based requirements in 'MIN_REQUIREMENTS' for a Pokémon, then displays each.
             for min_requirement in MIN_REQUIREMENTS:
@@ -124,10 +129,15 @@ while True:
             for j in range(len(evolution_body["chain"]["evolves_to"][i]["evolves_to"])):
                 print("\t\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0]["trigger"]["name"].title())
                 
-                # If the evolution requirement uses an item, it will print out the evolution item requirement.
-                if "use-item" in evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0]["trigger"]["name"]:
-                    # Uses .replace to fill in any hyphens with spaces to improve readability.
-                    print("\t\t\t\tItem Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0]["item"]["name"].title().replace("-", " "))
+                # Loops through each evolution entry for that Pokémon in search of an
+                # "item" key with an existing "name" key and value that contains the item requirement.
+                for z in range(len(evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"])):
+                    # Tries to print to see if it runs into an error or displays the item before skipping to any next iteration.
+                    try:
+                        print("\t\t\t\tItem Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][z]["item"]["name"].title().replace("-", " "))
+                    except:
+                        # Skips changing or displaying any unnecessary info.
+                        pass
                     
                 # Checks all number-based requirements in 'MIN_REQUIREMENTS' for a Pokémon, then displays each.
                 for min_requirement in MIN_REQUIREMENTS:
