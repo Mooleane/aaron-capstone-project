@@ -65,7 +65,7 @@ print("Pokéball Success Rate (Maximum is 255):", body["capture_rate"])
 ```
 
 # Technical Challenges + Future Plans
-A challenge during the creation of this project was displaying the requirements for each evolutionary stage of a Pokémon. Number-based requirements are looped through the API's data via a function in-order to account for most Pokémon, but still leaves room for miscellaneous evolution requirements.
+A challenge during the creation of this project was displaying the requirements for each evolutionary stage of a Pokémon, mostly due to time constraints. Number-based requirements are retrieved through the API's data via a function in-order to account for most Pokémon, but still leaves room for miscellaneous evolution requirements not displayed in the output.
 
 ## The Numerical Requirements
 
@@ -127,11 +127,13 @@ With more time, I could include a rundown of the Pokémon's stats, abilities, an
 # Project Timeline
 At our internship, we were first introduced to the creation of a project involving API calls and decided which APIs to use. 
 
-I chose PokéAPI v2, and skimmed through its documentation for ideas. 
+I chose PokéAPI v2, and searched through its documentation for ideas. 
 
 After some brainstorming, I decided to recreate the Pokédex (mainly its evolution information). 
 
 About 1-2 days were spent in school to implement its main features such as displaying general insights about a Pokémon and its evolution paths. 
+
+When the project's main deadline and revision deadlines were over, I showed the project to a few others.
 
 A day was spent at my internship to implement peer suggestions such as displaying the evolution requirements of Pokémon.
 
