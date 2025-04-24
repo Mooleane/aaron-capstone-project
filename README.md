@@ -7,13 +7,13 @@ Fans or Players of Pokémon.
 # Solution + Limitations
 Neat tips about a Pokémon can be requested by the user to ensure they know about it's general background, and what to do with it as a player in a digestable amount of time. It would be nice if the image of the Pokémon could be provided as well, alongside the official Pokédex entry instead of only the Pokemon's flavor text (usually found on cards). That would give the user more than enough insight on what the Pokémon is and does.
 # Key Features / Key Components
-When running the program, a prompt is given to enter a the valid name of a Pokémon or just their Pokédex number.
+When running the program, a prompt is given to enter the valid name of a Pokémon or just their Pokédex number.
 
 ```
 pokemon_name = input("Please enter a Pokémon's Name or Pokédex Number: ")
 ```
 
-Once entered, information about the Pokémon is validated and retrieved through the API, "PokéAPI v2," with a fair rate limit.
+Once entered, information about the Pokémon is validated and retrieved through the API, "PokéAPI v2," with a fair rate limit (no parameters needed to be changed).
 
 ## The API call and the validation steps
 
@@ -56,7 +56,7 @@ Once entered, information about the Pokémon is validated and retrieved through 
 
 ## 
 
-Player-important info such as the Pokémon's Pokéball success rate, and its evolution requirements for different paths will be displayed. Additionally, its Card entry will be shown for basic insights.
+Player-important info such as the Pokémon's Pokéball success rate, and its evolution requirements for different paths will be displayed. Additionally, its first flavor text entry will be shown for basic insights (not every entry is in English).
 
 ## Printing data retrieved from the API's json variable
 
