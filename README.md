@@ -65,7 +65,7 @@ print("Pokéball Success Rate (Maximum is 255):", body["capture_rate"])
 ```
 
 # Technical Challenges + Future Plans
-A challenge during the creation of this project was displaying the requirements for each evolutionary stage of a Pokémon, mostly due to time constraints. Number-based requirements are retrieved through the API's data via a function in-order to account for most Pokémon, but still leaves room for miscellaneous evolution requirements not displayed in the output.
+A challenge during the creation of this project was displaying the requirements for each evolutionary stage of a Pokémon, mostly due to the complexity of PokéAPI v2 requests. Number-based requirements are retrieved through the API's data via a function in-order to account for most Pokémon, but still leaves room for incorrect evolution requirements displayed in the output due to each evolution entry possibly having multiple versions from the PokéAPI v2 datasets.
 
 ## The Numerical Requirements
 
@@ -102,6 +102,7 @@ def evolutionRequirements2(evolution_information, min_requirement, second_stage,
             for min_requirement in MIN_REQUIREMENTS:
                 evolutionRequirements(evolution_body, min_requirement, i)
 ```
+
 ## The prints with "Eevee" as the Pokémon
 
 ```
@@ -117,7 +118,7 @@ Evolution Chain
             Happiness Requirement: 160
         Evolves Into: Umbreon | Requirement: Level-Up
             Happiness Requirement: 160
-        Evolves Into: Leafeon | Requirement: Level-Up # ? There seems to be miscellaneous requirements for this path and the one after since it would normally print the Level-Up requirements.
+        Evolves Into: Leafeon | Requirement: Level-Up # ? There seems to be incorrect requirements for this path and the one after since it is meant to be the Leaf stone and Ice stone respectively.
         Evolves Into: Glaceon | Requirement: Level-Up # ?
         Evolves Into: Sylveon | Requirement: Level-Up
             Affection Requirement: 2
@@ -138,6 +139,35 @@ When the project's main deadline and revision deadlines were over, I showed the 
 A day was spent at my internship to implement peer suggestions such as displaying the evolution requirements of Pokémon.
 
 Another opportunity arose to recycle this project for our internship's culminating project, where I intend to polish and optimize its features.
+
+# Updates
+The system for printing the item requirements of an evolution path has changed to use the very first version of a PokéAPI v2 entry that is not None nor outputs an error (uses 'try' to test for an item or an error/no item, 'except' to skip the error/no item, and 'pass' to output nothing about the error).
+
+## Before
+
+```python
+            # If the evolution requirement uses an item, it will print out the evolution item requirement.
+            if "use-item" in evolution_body["chain"]["evolves_to"][i]["evolution_details"][0]["trigger"]["name"]:
+                # Uses .replace to fill in any hyphens with spaces to improve readability.
+                print("\t\t\tItem Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][0]["item"]["name"].title().replace("-", " "))
+```
+
+This used to miss out on any item requirements if the first PokéAPI v2 entry [0] did not store an "item" key with an existing "name" key and value but the ones after it did, since PokéAPI v2 uses a dictionary of lists for different iterations/versions of the evolution entry for a Pokémon (this also applies to flavor text entries as it can go from the oldest to newest versions). 
+
+## After
+
+```python
+            for z in range(len(evolution_body["chain"]["evolves_to"][i]["evolution_details"])):
+                    # Tries to print to see if it runs into an error or displays the item before skipping to any next iteration.
+                    try:
+                        print("\t\t\tItem Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][z]["item"]["name"].title().replace("-", " "))
+                    except:
+                        # Skips changing or displaying any unnecessary info.
+                        pass
+```
+
+The for z in range loop goes through the dictionary of lists to print the first iteration/version of the Pokémon's evolution entry that contains the "item" key with an existing "name" key and value that contains the item requirement.
+
 # Tools and Resources Used
 * Python - The programming language used for the project.
 * TechSmart - The primary IDE used when coding this project.
