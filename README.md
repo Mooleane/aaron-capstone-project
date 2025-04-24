@@ -9,7 +9,7 @@ Neat tips about a Pokémon can be requested by the user to ensure they know abou
 # Key Features / Key Components
 When running the program, a prompt is given to enter the valid name of a Pokémon or just their Pokédex number.
 
-```
+```python
 pokemon_name = input("Please enter a Pokémon's Name or Pokédex Number: ")
 ```
 
@@ -17,7 +17,7 @@ Once entered, information about the Pokémon is validated and retrieved through 
 
 ## The API call and the validation steps
 
-```
+```python
     # The input loop will stop if the user wants to
     # quit the program by typing "EXIT".
     while pokemon_name != "EXIT":
@@ -60,7 +60,7 @@ Player-important info such as the Pokémon's Pokéball success rate, and its evo
 
 ## Printing data retrieved from the API's json variable
 
-```
+```python
 print("Pokéball Success Rate (Maximum is 255):", body["capture_rate"])
 ```
 
@@ -69,14 +69,14 @@ A challenge during the creation of this project was displaying the requirements 
 
 ## The Numerical Requirements
 
-```
+```python
 # The possible requirements for an evolution when calling an evolution chain function.
 MIN_REQUIREMENTS = ("min_level", "min_happiness", "min_beauty", "min_affection")
 ```
 
 ## The Functions
 
-```
+```python
 # Used for the second stage of a Pokémon in its evolution chain to list off evolution requirements.
 def evolutionRequirements(evolution_information, min_requirement, second_stage):
     # If the evolution's minimum requirement exists, it will print it as the minimum requirement.
@@ -92,7 +92,7 @@ def evolutionRequirements2(evolution_information, min_requirement, second_stage,
 
 ## Printing each available evolution requirement
 
-```
+```python
             # If the evolution requirement uses an item, it will print out the evolution item requirement.
             if "use-item" in evolution_body["chain"]["evolves_to"][i]["evolution_details"][0]["trigger"]["name"]:
                 # Uses .replace to fill in any hyphens with spaces to improve readability.
@@ -103,7 +103,8 @@ def evolutionRequirements2(evolution_information, min_requirement, second_stage,
                 evolutionRequirements(evolution_body, min_requirement, i)
 ```
 ## The prints with "Eevee" as the Pokémon
-```
+
+```python
 Evolution Chain
     Starts From: Eevee
         Evolves Into: Vaporeon | Requirement: Use-Item
