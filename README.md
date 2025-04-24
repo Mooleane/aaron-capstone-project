@@ -25,7 +25,7 @@ Once entered, information about the Pokémon is validated and retrieved through 
         # or the user input has a digit for the Pokédex Number.
         if pokemon_name.isalpha() or pokemon_name.isdigit():
             # Requests more info about the Pokémon from it's species entries.
-            # The input for 'pokemon_name' is lowered and added to 'URL + species_path'
+            # The input for 'pokemon_name' is lowered and added to 'URL + SPECIES_PATH'
             # to get info about that specific Pokémon with url capitalization consistency.
             request = requests.get(URL + SPECIES_PATH + pokemon_name.lower(), params=poke_params)
             body = request.json()
@@ -70,7 +70,7 @@ A challenge during the creation of this project was displaying the requirements 
 ## The Numerical Requirements
 
 ```
-# The possible requirements for an evolution, when calling an evolution chain function.
+# The possible requirements for an evolution when calling an evolution chain function.
 MIN_REQUIREMENTS = ("min_level", "min_happiness", "min_beauty", "min_affection")
 ```
 
