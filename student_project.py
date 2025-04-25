@@ -12,14 +12,14 @@ import requests
 # Used for the second stage of a Pokémon in its evolution chain to list off evolution requirements.
 def evolutionRequirements(evolution_information, min_requirement, second_stage):
     # If the evolution's minimum requirement exists, it will print it as the minimum requirement.
-    if evolution_body["chain"]["evolves_to"][second_stage]["evolution_details"][0][min_requirement] > 0:
-        print("\t\t\t" + min_requirement.replace("min_","").title() + " Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][0][min_requirement])
+    if evolution_information["chain"]["evolves_to"][second_stage]["evolution_details"][0][min_requirement] > 0:
+        print("\t\t\t" + min_requirement.replace("min_","").title() + " Requirement:", evolution_information["chain"]["evolves_to"][i]["evolution_details"][0][min_requirement])
         
 # Used for the third stage of a Pokémon in its evolution chain to list off evolution requirements.
 def evolutionRequirements2(evolution_information, min_requirement, second_stage, third_stage):
     # If the evolution's minimum requirement exists, it will print it as the minimum requirement.
-    if evolution_body["chain"]["evolves_to"][second_stage]["evolves_to"][third_stage]["evolution_details"][0][min_requirement] > 0:
-        print("\t\t\t\t" + min_requirement.replace("min_","").title() + " Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0][min_requirement])
+    if evolution_information["chain"]["evolves_to"][second_stage]["evolves_to"][third_stage]["evolution_details"][0][min_requirement] > 0:
+        print("\t\t\t\t" + min_requirement.replace("min_","").title() + " Requirement:", evolution_information["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0][min_requirement])
         
 ### -- Variables -- ###
 # The base url for accessing PokéAPI v2.
