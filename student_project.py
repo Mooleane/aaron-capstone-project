@@ -5,7 +5,7 @@ Project Title: Pokédex
 """
 
 # -- Imports -- #
-# Used for requesting information from API's with an API call.
+# Used to request information from APIs with an API call.
 import requests
 
 
