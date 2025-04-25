@@ -5,7 +5,7 @@ Useful for those who are stuck on how to obtain a Pokémon, or don't know what e
 # Target Audience
 Fans or Players of Pokémon. 
 # Solution + Limitations
-Neat tips about a Pokémon can be requested by the user to ensure they know about it's general background, and what to do with it as a player in a digestable amount of time. It would be nice if the image of the Pokémon could be provided as well, alongside the official Pokédex entry instead of only the Pokemon's flavor text (usually found on cards). That would give the user more than enough insight on what the Pokémon is and does.
+Neat tips about a Pokémon can be requested by the user to ensure they know about its general background, and what to do with it as a player in a digestable amount of time. It would be nice if the image of the Pokémon could be provided as well, alongside the official Pokédex entry instead of only the Pokemon's flavor text (usually found on cards). That would give the user more than enough insight on what the Pokémon is and does.
 # Key Features / Key Components
 When running the program, a prompt is given to enter the valid name of a Pokémon or just their Pokédex number.
 
@@ -118,8 +118,8 @@ Evolution Chain
             Happiness Requirement: 160
         Evolves Into: Umbreon | Requirement: Level-Up
             Happiness Requirement: 160
-        Evolves Into: Leafeon | Requirement: Level-Up # ? There seems to be incorrect requirements for this path and the one after since it is meant to be the Leaf stone and Ice stone respectively.
-        Evolves Into: Glaceon | Requirement: Level-Up # ?
+        Evolves Into: Leafeon | Requirement: Level-Up # ? Meant to be the item requirements of a "Leaf Stone".
+        Evolves Into: Glaceon | Requirement: Level-Up # ? Meant to be the item requirements of a "Ice Stone".
         Evolves Into: Sylveon | Requirement: Level-Up
             Affection Requirement: 2
 ```
@@ -141,6 +141,9 @@ A day was spent at my internship to implement peer suggestions such as displayin
 Another opportunity arose to recycle this project for our internship's culminating project, where I intend to polish and optimize its features.
 
 # Updates
+
+* # Fixed evolution item requirements not properly displaying
+
 The system for printing the item requirements of an evolution path has changed to use the very first version of a PokéAPI v2 entry that is not None nor outputs an error (uses 'try' to test for an item or an error/no item, 'except' to skip the error/no item, and 'pass' to output nothing about the error).
 
 ## Before
@@ -167,6 +170,68 @@ This used to miss out on any item requirements if the first PokéAPI v2 entry [0
 ```
 
 The for z in range loop goes through the dictionary of lists to print the first iteration/version of the Pokémon's evolution entry that contains the "item" key with an existing "name" key and value that contains the item requirement.
+
+* # Tweaked the evolution requirement functions to use the first passed argument
+
+The first parameter of the evolution requirement functions, 'evolution_information', retrieves the evolution entries (dictionary) parsed from a JSON request for PokéAPI v2. The original function body did not refer to this parameter, but instead assumed the parsed variable was 'evolution_body'. Each function body has been changed with the replacement of 'evolution_body" to 'evolution_information' as the parsed variable within the local namespace (the function still expects 'evolution_body', a.k.a the API evolution entries to be passed for 'evolution_information').
+
+## Before
+
+```python
+# Used for the second stage of a Pokémon in its evolution chain to list off evolution requirements.
+def evolutionRequirements(evolution_information, min_requirement, second_stage):
+    # If the evolution's minimum requirement exists, it will print it as the minimum requirement.
+    if evolution_body["chain"]["evolves_to"][second_stage]["evolution_details"][0][min_requirement] > 0:
+        print("\t\t\t" + min_requirement.replace("min_","").title() + " Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][0][min_requirement])
+        
+# Used for the third stage of a Pokémon in its evolution chain to list off evolution requirements.
+def evolutionRequirements2(evolution_information, min_requirement, second_stage, third_stage):
+    # If the evolution's minimum requirement exists, it will print it as the minimum requirement.
+    if evolution_body["chain"]["evolves_to"][second_stage]["evolves_to"][third_stage]["evolution_details"][0][min_requirement] > 0:
+        print("\t\t\t\t" + min_requirement.replace("min_","").title() + " Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0][min_requirement])
+```
+
+The variable 'evolution_body' is present two times within each function body.
+
+## After
+
+```python
+# Used for the second stage of a Pokémon in its evolution chain to list off evolution requirements.
+def evolutionRequirements(evolution_information, min_requirement, second_stage):
+    # If the evolution's minimum requirement exists, it will print it as the minimum requirement.
+    if evolution_information["chain"]["evolves_to"][second_stage]["evolution_details"][0][min_requirement] > 0:
+        print("\t\t\t" + min_requirement.replace("min_","").title() + " Requirement:", evolution_information["chain"]["evolves_to"][i]["evolution_details"][0][min_requirement])
+        
+# Used for the third stage of a Pokémon in its evolution chain to list off evolution requirements.
+def evolutionRequirements2(evolution_information, min_requirement, second_stage, third_stage):
+    # If the evolution's minimum requirement exists, it will print it as the minimum requirement.
+    if evolution_information["chain"]["evolves_to"][second_stage]["evolves_to"][third_stage]["evolution_details"][0][min_requirement] > 0:
+        print("\t\t\t\t" + min_requirement.replace("min_","").title() + " Requirement:", evolution_information["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0][min_requirement])
+```
+
+Both functions now use the parsed variable for the parameter 'evolution_information' instead of 'evolution_body' when referring to the API evolution entries.
+
+## Updated prints with Eevee as the Pokemon
+```
+Evolution Chain
+    Starts From: Eevee
+        Evolves Into: Vaporeon | Requirement: Use-Item
+            Item Requirement: Water Stone
+        Evolves Into: Jolteon | Requirement: Use-Item
+            Item Requirement: Thunder Stone
+        Evolves Into: Flareon | Requirement: Use-Item
+            Item Requirement: Fire Stone
+        Evolves Into: Espeon | Requirement: Level-Up
+            Happiness Requirement: 160
+        Evolves Into: Umbreon | Requirement: Level-Up
+            Happiness Requirement: 160
+        Evolves Into: Leafeon | Requirement: Level-Up # Meant to be "Use-Item"
+            Item Requirement: Leaf Stone # Correct
+        Evolves Into: Glaceon | Requirement: Level-Up # Meant to be "Use-Item"
+            Item Requirement: Ice Stone # Correct
+        Evolves Into: Sylveon | Requirement: Level-Up
+            Affection Requirement: 2
+```
 
 # Tools and Resources Used
 * Python - The programming language used for the project.
