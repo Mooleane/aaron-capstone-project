@@ -5,7 +5,7 @@ Useful for those who are stuck on how to obtain a Pokémon, or don't know what e
 # Target Audience
 Fans or Players of Pokémon. 
 # Solution + Limitations
-Neat tips about a Pokémon can be requested by the user to ensure they know about its general background, and what to do with it as a player in a digestable amount of time. It would be nice if the image of the Pokémon could be provided as well, alongside the official Pokédex entry instead of only the Pokemon's flavor text (usually found on cards). That would give the user more than enough insight on what the Pokémon is and does.
+Neat tips about a Pokémon can be requested by the user to ensure they know about its general background, and what to do with it as a player in a digestable amount of time. It would be nice if the image of the Pokémon could be provided as well, alongside the official Pokédex entry instead of only the Pokémon's flavor text (usually found on cards). That would give the user more than enough insight on what the Pokémon is and does.
 # Key Features / Key Components
 When running the program, a prompt is given to enter the valid name of a Pokémon or just their Pokédex number.
 
@@ -74,7 +74,7 @@ A challenge during the creation of this project was displaying the requirements 
 MIN_REQUIREMENTS = ("min_level", "min_happiness", "min_beauty", "min_affection")
 ```
 
-## The Functions
+## The First and Second Stage Functions
 
 ```python
 # Used for the second stage of a Pokémon in its evolution chain to list off evolution requirements.
@@ -90,7 +90,7 @@ def evolutionRequirements2(evolution_information, min_requirement, second_stage,
         print("\t\t\t\t" + min_requirement.replace("min_","").title() + " Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0][min_requirement])
 ```
 
-## Printing each available evolution requirement
+## Printing each Evolution Requirement
 
 ```python
             # If the evolution requirement uses an item, it will print out the evolution item requirement.
@@ -146,7 +146,7 @@ Another opportunity arose to recycle this project for our internship's culminati
 
 The system for printing the item requirements of an evolution path has changed to use the very first version of a PokéAPI v2 evolution entry (list) that is not None nor outputs an error (uses 'try' to test for an item or an error/no item, 'except' to skip the error/no item, and 'pass' to output nothing about the error).
 
-## Before
+## Printing the Very First Evolution Item Requirements (Before)
 
 ```python
             # If the evolution requirement uses an item, it will print out the evolution item requirement.
@@ -157,7 +157,7 @@ The system for printing the item requirements of an evolution path has changed t
 
 This used to miss out on any item requirements if the first PokéAPI v2 evolution entry (index 0) did not store an "item" key with an existing "name" key and value but the ones after it did, since PokéAPI v2 uses a dictionary of lists for different versions of the evolution entry for a Pokémon (this also applies to flavor text entries as it can go from the oldest to newest versions). 
 
-## After
+## Printing the First Available Evolution Item Requirements (After)
 
 ```python
             for z in range(len(evolution_body["chain"]["evolves_to"][i]["evolution_details"])):
@@ -175,7 +175,7 @@ The for z in range loop goes through the dictionary of lists to print the first 
 
 The first parameter of the evolution requirement functions, 'evolution_information', retrieves the evolution data (dictionary) parsed from a JSON request for PokéAPI v2. The original function body did not refer to this parameter, but instead assumed the parsed variable was 'evolution_body'. Each function body has been changed with the replacement of 'evolution_body" to 'evolution_information' as what the parameter indicates is the parsed evolution data (the function still expects 'evolution_body', a.k.a the API evolution data to be passed for 'evolution_information').
 
-## Before
+## The First and Second Stage Functions (Before)
 
 ```python
 # Used for the second stage of a Pokémon in its evolution chain to list off evolution requirements.
@@ -193,7 +193,7 @@ def evolutionRequirements2(evolution_information, min_requirement, second_stage,
 
 The variable 'evolution_body' is present two times within each function body.
 
-## After
+## The First and Second Stage Functions (After)
 
 ```python
 # Used for the second stage of a Pokémon in its evolution chain to list off evolution requirements.
@@ -211,7 +211,7 @@ def evolutionRequirements2(evolution_information, min_requirement, second_stage,
 
 Both functions now use the parameter 'evolution_information' for the parsed variable instead of 'evolution_body' when referring to the API evolution data.
 
-## Updated prints with Eevee as the Pokemon
+## Updated prints with Eevee as the Pokémon
 ```
 Evolution Chain
     Starts From: Eevee
@@ -237,18 +237,21 @@ Evolution Chain
 
 The system for printing both evolution item requirements and numerical evolution requirements have changed. Instead of 'try' being used to print the first available item requirement, it will validate and assign it to the variable 'item_entry_index' instead. It will use that to output the proper evolution requirement type, item requirement, and numerical requirements, all from the same PokéAPI v2 evolution entry (list).
 
-## Before
+## Printing the First Available Evolution Item Requirements (Before)
 
 ```python
             for z in range(len(evolution_body["chain"]["evolves_to"][i]["evolution_details"])):
                     # Tries to print to see if it runs into an error or displays the item before skipping to any next iteration.
                     try:
                         print("\t\t\tItem Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][z]["item"]["name"].title().replace("-", " "))
+                    except:
+                        # Skips changing or displaying any unnecessary info.
+                        pass
 ```
 
 This only helps with displaying the item requirement, completely ignoring the pretense of the requirement type also needing to be the use of an item.
 
-## After
+## Printing the First Available Evolution Requirements (After)
 
 ```python
             for z in range(len(evolution_body["chain"]["evolves_to"][i]["evolution_details"])):
@@ -287,7 +290,7 @@ This only helps with displaying the item requirement, completely ignoring the pr
 
 Each evolutionary stage has the display of their requirements tied to one for else loop. If there is no item requirement after every iteration, it will display the very first PokéAPI v2 evolution entry (index 0) requirements instead. This also needed the functions to be changed to include a default parameter value to determine the specific evolution entry to retrieve the requirements from (in the scenario where an evolution item requirement is contained after the first iteratated entry among the evolution entries), defaulting to 0 for the very first PokéAPI v2 evolution entry.
 
-## Before
+## The First Stage Function (Before)
 
 ```python
 # Used for the second stage of a Pokémon in its evolution chain to list off evolution requirements.
@@ -299,7 +302,7 @@ def evolutionRequirements(evolution_information, min_requirement, second_stage):
 
 This only considers the very first evolution entry (index 0) for the numerical requirements nested within a specific entry (list) nested within the key-value pair of "evolution_details".
 
-## After
+## The First Stage Function (After)
 
 ```python
 # Used for the second stage of a Pokémon in its evolution chain to list off evolution requirements.
