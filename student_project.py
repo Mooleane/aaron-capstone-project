@@ -62,7 +62,6 @@ while True:
             # The input for 'pokemon_name' is lowered and added to 'URL + SPECIES_PATH'
             # to get info about that specific Pokémon with url capitalization consistency.
             request = requests.get(URL + SPECIES_PATH + pokemon_name.lower(), params=poke_params)
-            body = request.json()
 
             # Checks if the request was OK (200).
             if request.status_code == 200:
