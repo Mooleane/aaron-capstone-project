@@ -342,4 +342,4 @@ Evolution Chain
 * Python - The programming language used for the project.
 * TechSmart - The primary IDE used when coding this project.
 * PokéAPI v2 - The API this project was based around, including all of its documentation.
-* CI Python Linter - Website which helped *reduce* the amount of PEP 8 infractions after writing the code.
+* CI Python Linter - Online checker which helped *reduce* the amount of PEP 8 infractions after writing the code.
