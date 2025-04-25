@@ -13,7 +13,7 @@ When running the program, a prompt is given to enter the valid name of a Pokémo
 pokemon_name = input("Please enter a Pokémon's Name or Pokédex Number: ")
 ```
 
-Once entered, information about the Pokémon is validated and retrieved through the API, "PokéAPI v2," with a fair rate limit (no parameters needed to be changed).
+Once entered, information about the Pokémon is validated and requested through the API, "PokéAPI v2," with a fair rate limit (no parameters needed to be changed). This is able to be done with the "requests" library.
 
 ## The API call and the validation steps
 
