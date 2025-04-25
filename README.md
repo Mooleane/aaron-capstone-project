@@ -212,6 +212,7 @@ def evolutionRequirements2(evolution_information, min_requirement, second_stage,
 Both functions now use the parameter 'evolution_information' for the parsed variable instead of 'evolution_body' when referring to the API evolution data.
 
 ## Updated prints with Eevee as the Pokémon
+
 ```
 Evolution Chain
     Starts From: Eevee
@@ -314,6 +315,29 @@ def evolutionRequirements(evolution_information, min_requirement, second_stage, 
 ```
 
 Every time 0 was previously used to find the corresponding evolution entry when called, it uses the default entry_index parameter instead.
+
+## Fixed prints with Eevee as the Pokémon
+
+```
+Evolution Chain
+    Starts From: Eevee
+        Evolves Into: Vaporeon | Requirement: Use-Item
+            Item Requirement: Water Stone
+        Evolves Into: Jolteon | Requirement: Use-Item
+            Item Requirement: Thunder Stone
+        Evolves Into: Flareon | Requirement: Use-Item
+            Item Requirement: Fire Stone
+        Evolves Into: Espeon | Requirement: Level-Up
+            Happiness Requirement: 160
+        Evolves Into: Umbreon | Requirement: Level-Up
+            Happiness Requirement: 160
+        Evolves Into: Leafeon | Requirement: Use-Item # Correct
+            Item Requirement: Leaf Stone
+        Evolves Into: Glaceon | Requirement: Use-Item # Correct
+            Item Requirement: Ice Stone
+        Evolves Into: Sylveon | Requirement: Level-Up
+            Affection Requirement: 2
+```
 
 # Tools and Resources Used
 * Python - The programming language used for the project.
