@@ -13,6 +13,15 @@ import requests
 # Used for the second stage of a Pokémon in its evolution chain
 # to list off evolution requirements.
 def evolutionRequirements(evolution_information, min_requirement, second_stage, entry_index=0):
+    """
+
+    Args:
+        evolution_information (dict): JSON variable parsed from the API call and validation
+        min_requirement (str): Type of requirement (i.e., "min_level", "min_happiness")
+        second_stage (int): Index of a Pokémon's second evolution path
+        entry_index (int): Index for a specific version of the Pokémon's entry (default is 0 for the first version)
+    """
+
     # If the evolution's minimum requirement exists, (above 0)
     # it will print it as the minimum requirement.
     if evolution_information["chain"]["evolves_to"][second_stage]["evolution_details"][entry_index][min_requirement] > 0:
@@ -22,6 +31,16 @@ def evolutionRequirements(evolution_information, min_requirement, second_stage, 
 # Used for the third stage of a Pokémon in its evolution chain
 # to list off evolution requirements.
 def evolutionRequirements2(evolution_information, min_requirement, second_stage, third_stage, entry_index=0):
+    """
+
+    Args:
+        evolution_information (dict): JSON variable parsed from the API call and validation
+        min_requirement (str): Type of requirement (i.e., "min_level", "min_happiness")
+        second_stage (int): Index of a Pokémon's second evolution path
+        third_stage (int): Index of a Pokémon's third evolution path
+        entry_index (int): Index for a specific version of the Pokémon's entry (default is 0 for the first version)
+    """
+
     # If the evolution's minimum requirement exists, it will print it as the minimum requirement.
     if evolution_information["chain"]["evolves_to"][second_stage]["evolves_to"][third_stage]["evolution_details"][entry_index][min_requirement] > 0:
         print("\t\t\t\t" + min_requirement.replace("min_", "").title() + " Requirement:", evolution_information["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][entry_index][min_requirement])
