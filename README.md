@@ -13,9 +13,9 @@ When running the program, a prompt is given to enter the valid name of a Pokémo
 pokemon_name = input("Please enter a Pokémon's Name or Pokédex Number: ")
 ```
 
-Once entered, information about the Pokémon is validated and requested through the API, "PokéAPI v2," with a fair rate limit (no parameters needed to be changed). This is able to be done with the "requests" library.
+Once entered, information about the Pokémon is requested and validated through the API, "PokéAPI v2," with a fair rate limit (no parameters needed to be changed). This is able to be done with the "requests" library.
 
-### Start of API call
+### Start of the API call
 
 ```python
         # Verifies the user input is either alphabetical for the Pokémon Name
@@ -27,7 +27,7 @@ Once entered, information about the Pokémon is validated and requested through 
             request = requests.get(URL + SPECIES_PATH + pokemon_name.lower(), params=poke_params)
 ```
 
-### Validation steps for the API call
+### Validating the API call (loops input otherwise)
 
 ```python
             # Checks if the request was OK (200).
@@ -36,22 +36,6 @@ Once entered, information about the Pokémon is validated and requested through 
                 body = request.json()
                 # Moves onto displaying the info by breaking out of the while loop.
                 break
-                
-            # Checks if there are too many requests (429).
-            elif request.status_code == 429:
-                pokemon_name = input("PokéAPI v2 is receiving too many requests. Try again later. ")
-                
-            # Assumes the Pokémon was invalid due to the request failing.
-            elif request.status_code == 404:
-                pokemon_name = input("Please enter a valid Pokémon. ")
-                
-            # Warns the user about a different request status code
-            else:
-                pokemon_name = input("Error: Status Code", request.status_code)
-
-        # Assumes the input was invalid due to not being entirely alphabetical or numerical.
-        else:
-            pokemon_name = input("Please enter a valid input (no symbols). ")
 ```
 
 Player-important info such as the Pokémon's Pokéball success rate, and its evolution requirements for different paths will be displayed. Additionally, its first flavor text entry will be shown for basic insights (not every entry is in English).
