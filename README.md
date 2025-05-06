@@ -359,6 +359,19 @@ Evolution Chain
             Affection Requirement: 2
 ```
 
+## Added input for "new" or "old" entries
+
+The beginning of the program will now ask for "new" or "old" entries for Pokémon.
+
+```python
+entry_type = input("Type \"new\" for newer entries, \"old\" for older entries. ")
+```
+
+* Old
+  * Gives the user the oldest possible info about a Pokémon.
+* New
+  * Gives the user the newest possible info about a Pokémon.
+
 # Tools and Resources Used
 * Python - The programming language used for the project.
 * TechSmart - The primary IDE used when coding this project.
