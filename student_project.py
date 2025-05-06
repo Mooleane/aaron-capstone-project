@@ -56,13 +56,23 @@ SPECIES_PATH = "pokemon-species/"
 # The possible requirements for an evolution when calling an evolution chain function.
 MIN_REQUIREMENTS = ("min_level", "min_happiness", "min_beauty", "min_affection")
 
+# The possible entry types that can be chosen by a user.
+ENTRY_TYPES = ("new", "old")
+
 # Parameters for each request.
 poke_params = {}
 
+# Acts as a placeholder for choosing different entry types.
+entry_type = "NONE"
+
 # -- Introduction -- #
 # Will only run at the start if the user just started the program.
+# Asks for "new", "old", or "relevant" as one of the user's inputs.
+while entry_type.lower() not in ENTRY_TYPES:
+    entry_type = input("Type \"NEW\" for newer entries, \"OLD\" for older entries. ")
+
 # Makes end an empty string to combine itself with the first user input.
-print("Welcome to the Pokédex. Type \"EXIT\" to quit. ", end="")
+print("\nWelcome to my Capstone Project. Type \"EXIT\" to quit. ", end="")
 
 # -- Main Loop -- #
 # Will keep running until the user types "EXIT" to break the loop.
@@ -113,7 +123,13 @@ while True:
         print("Pokémon Name:", body["name"].title())
         print("Pokéball Success Rate (Maximum is 255):", body["capture_rate"])
 
-        print("\nFlavor Text Entry:", body["flavor_text_entries"][0]["flavor_text"].replace("\n", " "))
+        # If the user chose to get new entries.
+        if entry_type.lower() == "new":
+            print("\nFlavor Text Entry:", body["flavor_text_entries"][-1]["flavor_text"].replace("\n", " "))
+
+        # Assumes the user chose to get old entries.
+        else:
+            print("\nFlavor Text Entry:", body["flavor_text_entries"][0]["flavor_text"].replace("\n", " "))
 
         # Requests more info about the Pokémon evolution from its
         # evolution chain url provided in the species entries.
@@ -131,78 +147,104 @@ while True:
         # Uses len to know how many evolutionary paths there are for that Pokémon in stage two.
         # Adds the requirement for the Pokémon to evolve into each path such as a level up or an item.
         for i in range(len(evolution_body["chain"]["evolves_to"])):
-            # Loops through each evolution entry for that Pokémon in search of an
-            # "item" key with an existing "name" key and value that contains the item requirement.
-            for z in range(len(evolution_body["chain"]["evolves_to"][i]["evolution_details"])):
-                # Tries validating itself with an if statement to see if it runs into an error/no item or contains the item.
+            # If the user chose to get new entries.
+            if entry_type.lower() == "new":
+                # Tries validating itself with an if statement to see if it runs into an error/no item or contains the item at index -1.
                 try:
-                    if evolution_body["chain"]["evolves_to"][i]["evolution_details"][z]["item"]["name"]:
-                        # This variable refers to the first most relevant evolution entry from PokéAPI v2 that contains an item requirement
-                        item_entry_index = z
-
-                        # These two prints are based off the same entry with the item requirement.
-                        print("\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][item_entry_index]["trigger"]["name"].title())
-                        print("\t\t\tItem Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][item_entry_index]["item"]["name"].title().replace("-", " "))
+                    if evolution_body["chain"]["evolves_to"][i]["evolution_details"][-1]["item"]["name"]:
+                        # These two prints are based off the newest entry using index -1.
+                        print("\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][-1]["trigger"]["name"].title())
+                        print("\t\t\tItem Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][-1]["item"]["name"].title().replace("-", " "))
 
                         # Checks all number-based requirements in 'MIN_REQUIREMENTS' for a Pokémon, then displays each.
                         for min_requirement in MIN_REQUIREMENTS:
-                            # The optional fourth argument which determines the entry being displayed
-                            # is replaced with the same entry with the item requirement.
-                            evolutionRequirements(evolution_body, min_requirement, i, item_entry_index)
+                            # The optional fourth argument becomes -1 for the newest entry indexes.
+                            evolutionRequirements(evolution_body, min_requirement, i, -1)
 
-                        # Breaks since it does need to print more about the evolution name, requirement type, and requirements.
-                        break
-
+                # Assumes there is no item requirement.
                 except:
-                    # Skips changing or displaying any unnecessary info.
-                    pass
+                    # This print is based off the newest entry using index -1.
+                    print("\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][-1]["trigger"]["name"].title())
 
-            # This runs when it evaluates there is no item requirements at all.
+                    # Checks all number-based requirements in 'MIN_REQUIREMENTS' for a Pokémon, then displays each.
+                    for min_requirement in MIN_REQUIREMENTS:
+                        # The optional fourth argument becomes -1 for the newest entry indexes.
+                        evolutionRequirements(evolution_body, min_requirement, i, -1)
+
+            # Assumes the user chose to get old entries.
             else:
-                # This version of the print uses its first evolution entry from PokéAPI v2.
-                print("\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][0]["trigger"]["name"].title())
+                # Tries validating itself with an if statement to see if it runs into an error/no item or contains the item at index 0.
+                try:
+                    if evolution_body["chain"]["evolves_to"][i]["evolution_details"][0]["item"]["name"]:
+                        # These two prints are based off the oldest entry using index 0.
+                        print("\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][0]["trigger"]["name"].title())
+                        print("\t\t\tItem Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][0]["item"]["name"].title().replace("-", " "))
 
-                # Checks all number-based requirements in 'MIN_REQUIREMENTS' for a Pokémon, then displays each.
-                for min_requirement in MIN_REQUIREMENTS:
-                    evolutionRequirements(evolution_body, min_requirement, i)
+                        # Checks all number-based requirements in 'MIN_REQUIREMENTS' for a Pokémon, then displays each.
+                        for min_requirement in MIN_REQUIREMENTS:
+                            # The optional fourth argument defaults to 0 for the oldest entry indexes.
+                            evolutionRequirements(evolution_body, min_requirement, i)
+
+                # Assumes there is no item requirement.
+                except:
+                    # This print is based off the oldest entry using index 0.
+                    print("\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolution_details"][0]["trigger"]["name"].title())
+
+                    # Checks all number-based requirements in 'MIN_REQUIREMENTS' for a Pokémon, then displays each.
+                    for min_requirement in MIN_REQUIREMENTS:
+                        # The optional fourth argument defaults to 0 for the oldest entry indexes.
+                        evolutionRequirements(evolution_body, min_requirement, i)
 
             # Prints out each path for the Pokémon's third evolutionary stage (j for each evolution path).
             # Uses len to know how many evolutionary paths there are for that Pokémon in stage three.
             # Adds the requirement for the Pokémon to evolve into each path such as a level up or an item.
             for j in range(len(evolution_body["chain"]["evolves_to"][i]["evolves_to"])):
-                # Loops through each evolution entry for that Pokémon in search of an
-                # "item" key with an existing "name" key and value that contains the item requirement.
-                for z in range(len(evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"])):
-                    # Tries validating itself with an if statement to see if it runs into an error/no item or contains the item.
+                if entry_type.lower() == "new":
+                    # Tries validating itself with an if statement to see if it runs into an error/no item or contains the item at index -1.
                     try:
-                        if evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][z]["item"]["name"]:
-                            # This variable refers to the first most relevant evolution entry from PokéAPI v2 that contains an item requirement
-                            item_entry_index = z
-                            # These two prints are based off the same entry with the item requirement.
-                            print("\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][item_entry_index]["trigger"]["name"].title())
-                            print("\t\t\t\tItem Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][item_entry_index]["item"]["name"].title().replace("-", " "))
+                        if evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][-1]["item"]["name"]:
+                            # These two prints are based off the newest entry using index -1.
+                            print("\t\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][-1]["trigger"]["name"].title())
+                            print("\t\t\t\tItem Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][-1]["item"]["name"].title().replace("-", " "))
 
                             # Checks all number-based requirements in 'MIN_REQUIREMENTS' for a Pokémon, then displays each.
                             for min_requirement in MIN_REQUIREMENTS:
-                                # The optional fifth argument which determines the entry being displayed
-                                # is replaced with the same entry with the item requirement.
-                                evolutionRequirements(evolution_body, min_requirement, i, j, item_entry_index)
+                                # The optional fifth argument becomes -1 for the newest entry indexes.
+                                evolutionRequirements2(evolution_body, min_requirement, i, j, -1)
 
-                            # Breaks since it does need to print more about the evolution name, requirement type, and requirements.
-                            break
-
+                    # Assumes there is no item requirement.
                     except:
-                        # Skips changing or displaying any unnecessary info.
-                        pass
+                        # These two prints are based off the newest entry using index -1.
+                        print("\t\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][-1]["trigger"]["name"].title())
 
-                # This runs when it evaluates there is no item requirements at all.
+                        # Checks all number-based requirements in 'MIN_REQUIREMENTS' for a Pokémon, then displays each.
+                        for min_requirement in MIN_REQUIREMENTS:
+                            # The optional fifth argument becomes -1 for the newest entry indexes.
+                            evolutionRequirements2(evolution_body, min_requirement, i, j)
+
+                # Assumes the user chose to get old entries.
                 else:
-                    # This version of the print uses its first evolution entry from PokéAPI v2.
-                    print("\t\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0]["trigger"]["name"].title())
+                    # Tries validating itself with an if statement to see if it runs into an error/no item or contains the item at index 0.
+                    try:
+                        if evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0]["item"]["name"]:
+                            # These two prints are based off the oldest entry using index 0.
+                            print("\t\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0]["trigger"]["name"].title())
+                            print("\t\t\t\tItem Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0]["item"]["name"].title().replace("-", " "))
 
-                    # Checks all number-based requirements in 'MIN_REQUIREMENTS' for a Pokémon, then displays each.
-                    for min_requirement in MIN_REQUIREMENTS:
-                        evolutionRequirements(evolution_body, min_requirement, i, j)
+                            # Checks all number-based requirements in 'MIN_REQUIREMENTS' for a Pokémon, then displays each.
+                            for min_requirement in MIN_REQUIREMENTS:
+                                # The optional fourth argument defaults to 0 for the oldest entry indexes.
+                                evolutionRequirements2(evolution_body, min_requirement, i, j)
+
+                    # Assumes there is no item requirement.
+                    except:
+                        # This prints is based off the oldest entry using index 0.
+                        print("\t\t\tEvolves Into:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["species"]["name"].title(), "| Requirement:", evolution_body["chain"]["evolves_to"][i]["evolves_to"][j]["evolution_details"][0]["trigger"]["name"].title())
+
+                        # Checks all number-based requirements in 'MIN_REQUIREMENTS' for a Pokémon, then displays each.
+                        for min_requirement in MIN_REQUIREMENTS:
+                            # The optional fourth argument defaults to 0 for the oldest entry indexes.
+                            evolutionRequirements2(evolution_body, min_requirement, i, j)
 
         print()
 
