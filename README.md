@@ -359,12 +359,12 @@ Evolution Chain
             Affection Requirement: 2
 ```
 
-## Added input for "new" or "old" entries
+## Added input for "NEW" or "OLD" entries
 
-The beginning of the program will now ask for "new" or "old" entries for Pokémon.
+The beginning of the program will now ask for "NEW" or "OLD" entries for Pokémon.
 
 ```python
-entry_type = input("Type \"new\" for newer entries, \"old\" for older entries. ")
+entry_type = input("Type \"NEW\" for newer entries, \"OLD\" for older entries. ")
 ```
 
 * Old
