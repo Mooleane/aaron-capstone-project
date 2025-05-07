@@ -67,7 +67,7 @@ entry_type = "NONE"
 
 # -- Introduction -- #
 # Will only run at the start if the user just started the program.
-# Asks for "new", "old", or "relevant" as one of the user's inputs.
+# Asks for "new" or "old" as one of the user's inputs.
 while entry_type.lower() not in ENTRY_TYPES:
     entry_type = input("Type \"NEW\" for newer entries, \"OLD\" for older entries. ")
 
