@@ -372,6 +372,42 @@ entry_type = input("Type \"NEW\" for newer entries, \"OLD\" for older entries. "
 * New
   * Gives the user the newest possible info about a Pokémon.
 
+## Added an input whitelist for certain Pokémon.
+
+Certain Pokémon names that are alphabetical but also include symbols/digits are whitelisted from the input verification steps. That is because the program relied on finding out if the user's input was entirely alphabetical or numerical, and anywhere in-between used to be ignored.
+
+### Updated if statement for input verifcation
+
+```python
+if pokemon_name.isalpha() or pokemon_name.isdigit() or pokemon_name.lower() in POKEMON_WHITELIST:
+```
+
+Includes another condition that verifies the user's input for Pokémon listed in the tuple, 'POKEMON_WHITELIST'.
+
+### The Pokémon Whitelist
+
+```python
+POKEMON_WHITELIST = (
+    "nidoran-m",
+    "nidoran-f",
+    "mr-rime",
+    "porygon2",
+    "ho-oh",
+    "mime-jr",
+    "porygon-z",
+    "jangmo-o",
+    "hakamo-o",
+    "kommo-o",
+    "tapu-koko",
+    "tapu-lele",
+    "tapu-bulu",
+    "tapu-fini",
+    "mr-mime",
+)
+```
+
+There will no longer be any restrictions when inputting these Pokémon into the program.
+
 # Tools and Resources Used
 * Python - The programming language used for the project.
 * TechSmart - The primary IDE used when coding this project.
